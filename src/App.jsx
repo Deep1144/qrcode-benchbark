@@ -15,7 +15,7 @@ function App() {
 
     QRCode.toCanvas(
       canvasRef.current,
-      'sample text',
+      'https://www.siriusxm.com/',
       { toSJISFunc: QRCode.toSJIS },
       function (error) {
         if (error) console.error(error)
@@ -42,7 +42,7 @@ function App() {
 
   return (
     <>
-      <canvas ref={canvasRef}></canvas>
+      <canvas style={{height:256}} ref={canvasRef}></canvas>
       <div>
         <pre>
           {JSON.stringify(qrCodeResult, null, 2)}
