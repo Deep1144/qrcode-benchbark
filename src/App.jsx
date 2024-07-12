@@ -1,41 +1,16 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './App.css'
 import QRCode from 'qrcode'
-// import 'qrcodejs/jquery.min'
-// import 'qrcodejs/qrcode'
-// const QRCode = require('qrcodejs')
-import Stats from 'stats.js';
 
 function App() {
-  const divRef = useRef()
   const canvasRef = useRef()
+  const [qrCodeResult, setQrCodeResult] = useState({})
 
-  // useLayoutEffect(()=> {
-  //   console.log('QRCode',QRCode)
-  //   const qrcode = new QRCode(divRef.current, {
-  //     text: "http://jindo.dev.naver.com/collie",
-  //     width: 128,
-  //     height: 128,
-  //     colorDark : "#000000",
-  //     colorLight : "#ffffff",
-  //     // correctLevel : QRCode.CorrectLevel.H
-  // });
+  const renderQr = () => {
+    const cpuStart = performance.now();
+    const memoryStart = performance.memory.usedJSHeapSize;
 
-
-  // }, [])
-
-  useLayoutEffect(() => {
-
-    const stats = new Stats();
-    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-    stats.addPanel(1)
-    console.log(
-      stats
-    )
-    document.getElementById('stats').appendChild(stats.dom);
-
-    stats.begin();
-
+    // Execute the method and measure time taken
     const startTime = performance.now();
 
     QRCode.toCanvas(
@@ -45,22 +20,37 @@ function App() {
       function (error) {
         if (error) console.error(error)
         console.log('success!')
-        stats.end();
-        const endTime = performance.now();
-        
-      }
-    )
-  }, [])
 
+        const endTime = performance.now();
+        const cpuEnd = performance.now();
+        const memoryEnd = performance.memory.usedJSHeapSize;
+
+        // Calculate metrics
+        const timeTaken = (endTime - startTime); // Convert to seconds
+        const cpuUsage = (cpuEnd - cpuStart); // Convert to seconds
+        const memoryUsage = (memoryEnd - memoryStart) / 1024; // Convert to KB
+
+        // Set the formatted results
+        setQrCodeResult({
+          timeTaken: `${timeTaken.toFixed(2)} ms`,
+          cpuUsage: `${cpuUsage.toFixed(2)} ms`,
+          memoryUsage: `${memoryUsage.toFixed(2)} KB`
+        });
+      }
+    );
+  };
 
   return (
     <>
       <canvas ref={canvasRef}></canvas>
-      <div ref={divRef}>
-
+      <div>
+        <pre>
+          {JSON.stringify(qrCodeResult, null, 2)}
+        </pre>
       </div>
-
-      <div className='stats' id='stats'></div>
+      <button onClick={renderQr}>
+        Render
+      </button>
     </>
   )
 }
