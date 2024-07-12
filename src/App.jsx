@@ -4,6 +4,7 @@ import QRCode from 'qrcode'
 // import 'qrcodejs/jquery.min'
 // import 'qrcodejs/qrcode'
 // const QRCode = require('qrcodejs')
+import Stats from 'stats.js';
 
 function App() {
   const divRef = useRef()
@@ -25,10 +26,16 @@ function App() {
 
   useLayoutEffect(() => {
 
-    const cpuStart = performance.now();
-    const memoryStart = performance.memory.usedJSHeapSize;
+    const stats = new Stats();
+    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    stats.addPanel(1)
+    console.log(
+      stats
+    )
+    document.getElementById('stats').appendChild(stats.dom);
 
-    // Execute the method and measure time taken
+    stats.begin();
+
     const startTime = performance.now();
 
     QRCode.toCanvas(
@@ -38,21 +45,9 @@ function App() {
       function (error) {
         if (error) console.error(error)
         console.log('success!')
-
+        stats.end();
         const endTime = performance.now();
-
-        const cpuEnd = performance.now();
-        const memoryEnd = performance.memory.usedJSHeapSize;
-
-        // Calculate metrics
-        const timeTaken = endTime - startTime;
-        const cpuUsage = cpuEnd - cpuStart;
-        const memoryUsage = memoryEnd - memoryStart;
-        console.log({
-          timeTaken,
-          cpuUsage,
-          memoryUsage
-        })
+        
       }
     )
   }, [])
@@ -64,6 +59,8 @@ function App() {
       <div ref={divRef}>
 
       </div>
+
+      <div className='stats' id='stats'></div>
     </>
   )
 }
