@@ -1775,6 +1775,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+memory-stats@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/memory-stats/-/memory-stats-1.0.2.tgz#806690763e83982270038563bbd153fd55a8be85"
+  integrity sha512-vAQRK6WtxQRMFLLbNbIg+9A4NB9IG7epKKa+5b3IYJ6CAGMIxNhPvVTMByS0+vwNOrfz7F9FwCoTmkk4/O8xHQ==
+
 minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"

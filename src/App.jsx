@@ -42,7 +42,10 @@ function App() {
 
   return (
     <>
-      <canvas style={{height:256}} ref={canvasRef}></canvas>
+    <h1>
+    qrcode
+    </h1>
+      <canvas  ref={canvasRef}></canvas>
       <div>
         <pre>
           {JSON.stringify(qrCodeResult, null, 2)}

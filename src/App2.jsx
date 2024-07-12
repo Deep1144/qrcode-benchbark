@@ -1,13 +1,27 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './App.css'
+import MemoryStats from 'memory-stats'
 // import QRCode from 'qrcodejs'
+const stats = new MemoryStats();
+stats.domElement.style.position = 'fixed';
+stats.domElement.style.right = '0px';
+stats.domElement.style.bottom = '0px';
 
+document.body.appendChild(stats.domElement);
+
+
+requestAnimationFrame(function rAFloop() {
+    stats.update();
+    requestAnimationFrame(rAFloop);
+});
 function App() {
     const divRf = useRef()
     const [qrCodeResult, setQrCodeResult] = useState({})
 
     const renderQr = () => {
         console.log('QRCode', QRCode)
+      
+
         const cpuStart = performance.now();
         const memoryStart = performance.memory.usedJSHeapSize;
 
@@ -22,7 +36,6 @@ function App() {
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
         });
-        console.log('qrcode', qrcode)
 
         const endTime = performance.now();
         const cpuEnd = performance.now();
@@ -43,6 +56,9 @@ function App() {
 
     return (
         <>
+        <h1>
+            QrcodeJs
+        </h1>
             <div ref={divRf}></div>
             <div>
                 <pre>
