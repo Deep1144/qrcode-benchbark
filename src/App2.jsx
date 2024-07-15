@@ -26,12 +26,6 @@ function App() {
         } catch (error) {
             console.log('error', error);
         }
-        const cpuStart = performance.now();
-        const memoryStart = performance.memory.usedJSHeapSize;
-
-        // Execute the method and measure time taken
-        const startTime = performance.now();
-
         new QRCode(divRf.current, {
             text: "https://www.siriusxm.com/",
             width: 100,
@@ -40,38 +34,36 @@ function App() {
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
         });
-
-        const endTime = performance.now();
-        const cpuEnd = performance.now();
-        const memoryEnd = performance.memory.usedJSHeapSize;
-
-        // Calculate metrics
-        const timeTaken = endTime - startTime; // in ms
-        const cpuUsage = cpuEnd - cpuStart; // in ms
-        const memoryUsage = (memoryEnd - memoryStart) / 1024; // in KB
-
-        callback({ timeTaken, cpuUsage, memoryUsage });
+        callback({  });
     };
 
     const runBenchmark = async () => {
-        let totalTime = 0;
-        let totalCpu = 0;
-        let totalMemory = 0;
+        const cpuStart = performance.now();
+        const memoryStart = performance.memory.usedJSHeapSize;
+    
+        const startTime = performance.now();
 
+        
         for (let i = 0; i < iterations; i++) {
             await new Promise((resolve) => {
-                renderQr(({ timeTaken, cpuUsage, memoryUsage }) => {
-                    totalTime += timeTaken;
-                    totalCpu += cpuUsage;
-                    totalMemory += memoryUsage;
+                renderQr(({ }) => {
                     resolve();
                 });
             });
         }
 
-        const avgTimeTaken = (totalTime / iterations).toFixed(2);
-        const avgCpuUsage = (totalCpu / iterations).toFixed(2);
-        const avgMemoryUsage = (totalMemory / iterations).toFixed(2);
+        const endTime = performance.now();
+        const cpuEnd = performance.now();
+        const memoryEnd = performance.memory.usedJSHeapSize;
+    
+        const timeTaken = endTime - startTime; // in ms
+        const cpuUsage = cpuEnd - cpuStart; // in ms
+        const memoryUsage = (memoryEnd - memoryStart) / 1024; // in KB
+    
+    
+        const avgTimeTaken = (timeTaken / iterations).toFixed(2);
+        const avgCpuUsage = (cpuUsage / iterations).toFixed(2);
+        const avgMemoryUsage = (memoryUsage / iterations).toFixed(2);
 
         setQrCodeResult({
             timeTaken: `${avgTimeTaken} ms`,
